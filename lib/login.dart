@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mini_project/constants/colors.dart';
 import 'package:mini_project/forgot.dart';
 import 'package:mini_project/home.dart';
 import 'package:mini_project/signin.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,25 +17,17 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
-  final String _hardcodedUsername = 'saniyasowris940@gmail.com';
-  final String _hardcodedPassword = '1234';
   bool _obscureText = true;
-
   bool _isLoading = false;
+
   @override
   void dispose() {
     _userController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
-//   void saveAndNavigate(String username, BuildContext context) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString('u123', username);
 
-//   Navigator.pushNamed(context, '/dashboard');
-// }
-
-  void _validationLogin() {
+  Future<void> _validationLogin() async {
     print("Login pressed!");
     final u = _userController.text.trim();
     final p = _passwordController.text;
@@ -41,37 +35,51 @@ class _LoginState extends State<Login> {
     if (u.isEmpty || p.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Please fill in both username and password')),
+          content: Text('Please fill in both username and password'),
+        ),
       );
       return;
     }
+
     setState(() {
       _isLoading = true;
     });
-    Future.delayed(const Duration(seconds: 1), () {
-      if (u == _hardcodedUsername && p == _hardcodedPassword) {
-        print("Credentials correct, navigating...");
-        try {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const Home()),
-          );
-        } catch (e) {
-          print("Navigation Error: $e");
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Navigation failed: $e")),
-          );
-        } finally {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      } else {
+
+    try {
+      // Change IP if testing on real device
+      final url = Uri.parse("http://10.0.2.2:5000/users/login");
+
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"email": u, "password": p}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid username or password')),
+          SnackBar(content: Text(data["message"] ?? "Login successful!")),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      } else {
+        final data = json.decode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data["error"] ?? "Invalid credentials")),
         );
       }
-    });
+    } catch (e) {
+      print("Login Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Error connecting to server")),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -81,18 +89,16 @@ class _LoginState extends State<Login> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Text(
             "Welcome",
             style:
                 GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 45),
-            textAlign: TextAlign.left,
           ),
           Text(
             "Back!",
             style:
                 GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 45),
-            textAlign: TextAlign.left,
           ),
           const SizedBox(height: 30),
           TextField(
@@ -152,7 +158,7 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -180,11 +186,11 @@ class _LoginState extends State<Login> {
                     ),
             ),
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Create an Account."),
+              const Text("Create an Account."),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
