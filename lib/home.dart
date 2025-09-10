@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mini_project/constants/colors.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -16,6 +15,11 @@ class _HomeState extends State<Home> {
   //   'assets/clip2.jpg',
   //   'assets/key7.jpg',
   // ];
+  final List<Map<String, String>> categories = [
+    {"name": "bouquets", "image": 'assets/bouquet1.jpg'},
+    {"name": "clips", "image": 'assets/clip2.jpg'},
+    {"name": "keychains", "image": 'assets/key7.jpg'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +27,25 @@ class _HomeState extends State<Home> {
       backgroundColor: Appcolors.primary,
       appBar: AppBar(
         title: Text(
-          "Little Crochet",
+          "                Little Crochet",
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               fontSize: 18,
               fontStyle: FontStyle.italic,
               color: Appcolors.third),
-          textAlign: TextAlign.center,
         ),
+        leading: Icon(Icons.menu),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: const SingleChildScrollView(
-        child: Column(
-          children: [
+        child: Column(children: [
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search',
@@ -45,7 +54,7 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-        SizedBox(height: 30),
+          SizedBox(height: 30),
         ]),
       ),
     );
