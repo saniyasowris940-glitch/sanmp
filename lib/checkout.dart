@@ -212,4 +212,3 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 }
-
