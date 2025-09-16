@@ -9,6 +9,7 @@ class Placeorder extends StatefulWidget {
 }
 
 class _PlaceorderState extends State<Placeorder> {
+  int _selectedQty = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,32 +28,53 @@ class _PlaceorderState extends State<Placeorder> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset("assets/images/clips2.jpg",
-                      height: 100, width: 80, fit: BoxFit.cover),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
                     children: [
-                      Text(
-                        "flower puff claw clips",
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset("assets/images/clips2.jpg",
+                            height: 100, width: 80, fit: BoxFit.cover),
                       ),
-                      SizedBox(height: 6),
-                      Text("qty:1"),
-                      SizedBox(height: 6),
-                      Text("Delivery: 10 May 20XX"),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "flower puff claw clips",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 6),
+                            DropdownButton<int>(
+                              value: _selectedQty,
+                              items: List.generate(10, (index) => index + 1)
+                                  .map((qty) => DropdownMenuItem(
+                                        value: qty,
+                                        child: Text("qty: $qty"),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedQty = value!;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 6),
+                            Text("Delivery: 10 May 20XX"),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ],
-            )
+                  )),
+            ),
           ],
         ),
       ),
