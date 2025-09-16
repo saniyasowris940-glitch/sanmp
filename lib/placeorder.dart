@@ -34,19 +34,23 @@ class _PlaceorderState extends State<Placeorder> {
                   child: Image.asset("assets/images/clips2.jpg",
                       height: 100, width: 80, fit: BoxFit.cover),
                 ),
-                SizedBox(height: 20),
+                SizedBox(width: 16),
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "flower puff claw clips",
-                      style: GoogleFonts.poppins(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 6),
-                  ],
-                ))
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "flower puff claw clips",
+                        style: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 6),
+                      Text("qty:1"),
+                      SizedBox(height: 6),
+                      Text("Delivery: 10 May 20XX"),
+                    ],
+                  ),
+                ),
               ],
             )
           ],
