@@ -26,12 +26,6 @@ class _LoginState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
-//   void saveAndNavigate(String username, BuildContext context) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString('u123', username);
-
-//   Navigator.pushNamed(context, '/dashboard');
-// }
 
   void _validationLogin() {
     print("Login pressed!");
